@@ -14,9 +14,9 @@
   "projectId" : "B53C7369-DCD6-4F38-BDD5-7DE96C20A05C",
   "deviceOrientation" : 0,
   "selectedHand" : "",
-  "showBezel" : 0,
+  "showBezel" : false,
   "foldedCodeRanges" : [
-    "{108, 1166}"
+    "{191, 1270}"
   ],
   "deviceScale" : "fit"
 }

@@ -1,0 +1,28 @@
+{
+  "profiles": [
+    {
+      "username": "Dylan",
+      "location": "Berlin, Germany",
+      "skillLevel": "Casual",
+      "rateTotal": "42"
+    },
+    {
+      "username": "David",
+      "location": "Amsterdam, Netherlands",
+      "skillLevel": "Pro Casual",
+      "rateTotal": "24"
+    },
+    {
+      "username": "Caro",
+      "location": "Rome, Italy",
+      "skillLevel": "Beginner",
+      "rateTotal": "2"
+    },
+    {
+      "username": "Benni",
+      "location": "Zadar, Croatia",
+      "skillLevel": "Pro Casual",
+      "rateTotal": "2"
+    }
+  ]
+}

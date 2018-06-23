@@ -1,3 +1,5 @@
+storedProfiles = (JSON.parse Utils.domLoadDataSync "data/profiles.json").profiles
+
 Screen.backgroundColor = "white"
 
 ##variables
@@ -11,7 +13,7 @@ class card_profile extends Layer
 	constructor: (options = {}) ->
 
 		_.defaults options,
-			name: "profile"
+			name: "card_profile"
 			height: 351
 			width: 264
 			backgroundColor: primaryColour
@@ -27,6 +29,7 @@ class card_profile extends Layer
 		
 		@layers.lbl_username = new TextLayer
 			parent: @
+			name: "lbl_username"
 			y: 32
 			x: 24
 			text: options.username
@@ -37,6 +40,7 @@ class card_profile extends Layer
 		
 		@layers.lbl_location = new TextLayer
 			parent: @
+			name: "lbl_location"
 			y: @layers.lbl_username.maxY
 			x: @layers.lbl_username.x
 			text: options.location
@@ -45,7 +49,8 @@ class card_profile extends Layer
 			color: secondaryColour
 		
 		@layers.lbl_skillLevel = new TextLayer
-			parent: @	
+			parent: @
+			name: "lbl_skillLevel"	
 			y: Align.bottom(-60)
 			x: @layers.lbl_username.x
 			text: options.skillLevel
@@ -56,6 +61,7 @@ class card_profile extends Layer
 		
 		@layers.lbl_rateTotal = new TextLayer
 			parent: @
+			name: "lbl_rateTotal"
 			y: @layers.lbl_skillLevel.maxY
 			x: @layers.lbl_username.x
 			text: options.rateTotal
