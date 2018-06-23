@@ -1,3 +1,5 @@
+profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+
 Screen.backgroundColor = "white"
 
 ##variables
@@ -11,15 +13,15 @@ class card_profile extends Layer
 	constructor: (options = {}) ->
 
 		_.defaults options,
-			name: "profile"
+			name: "card_profile"
 			height: 351
 			width: 264
 			backgroundColor: primaryColour
 			borderRadius: 24
-			username: "{username}"
-			location: "{location}"
-			skillLevel: "{skillLevel}"
-			rateTotal: "{rateTotal}"
+			username: "username"
+			location: "location"
+			skillLevel: "skillLevel"
+			rateTotal: "rateTotal"
 		
 		super options
 		
@@ -27,6 +29,7 @@ class card_profile extends Layer
 		
 		@layers.lbl_username = new TextLayer
 			parent: @
+			name: "lbl_username"
 			y: 32
 			x: 24
 			text: options.username
@@ -37,6 +40,7 @@ class card_profile extends Layer
 		
 		@layers.lbl_location = new TextLayer
 			parent: @
+			name: "lbl_location"
 			y: @layers.lbl_username.maxY
 			x: @layers.lbl_username.x
 			text: options.location
@@ -45,7 +49,8 @@ class card_profile extends Layer
 			color: secondaryColour
 		
 		@layers.lbl_skillLevel = new TextLayer
-			parent: @	
+			parent: @
+			name: "lbl_skillLevel"	
 			y: Align.bottom(-60)
 			x: @layers.lbl_username.x
 			text: options.skillLevel
@@ -56,11 +61,16 @@ class card_profile extends Layer
 		
 		@layers.lbl_rateTotal = new TextLayer
 			parent: @
+			name: "lbl_rateTotal"
 			y: @layers.lbl_skillLevel.maxY
 			x: @layers.lbl_username.x
-			text: options.rateTotal
+			text: options.rateTotal + " Ratings"
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 
 new card_profile
+	username: profileData.profiles[1].username
+	location: profileData.profiles[1].location
+	skillLevel: profileData.profiles[1].skillLevel
+	rateTotal: profileData.profiles[1].rateTotal
