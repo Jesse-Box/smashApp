@@ -1,4 +1,4 @@
-storedProfiles = (JSON.parse Utils.domLoadDataSync "data/profiles.json").profiles
+profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
 
 Screen.backgroundColor = "white"
 
@@ -21,7 +21,7 @@ class card_profile extends Layer
 			username: "{username}"
 			location: "{location}"
 			skillLevel: "{skillLevel}"
-			rateTotal: "{rateTotal}"
+			rateTotal: "{rateTotal} ratings"
 		
 		super options
 		
@@ -70,3 +70,4 @@ class card_profile extends Layer
 			color: secondaryColour
 
 new card_profile
+	username: profileData.profiles.username
