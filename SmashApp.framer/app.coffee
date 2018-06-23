@@ -18,10 +18,10 @@ class card_profile extends Layer
 			width: 264
 			backgroundColor: primaryColour
 			borderRadius: 24
-			username: "{username}"
-			location: "{location}"
-			skillLevel: "{skillLevel}"
-			rateTotal: "{rateTotal} ratings"
+			username: "username"
+			location: "location"
+			skillLevel: "skillLevel"
+			rateTotal: "rateTotal"
 		
 		super options
 		
@@ -64,10 +64,13 @@ class card_profile extends Layer
 			name: "lbl_rateTotal"
 			y: @layers.lbl_skillLevel.maxY
 			x: @layers.lbl_username.x
-			text: options.rateTotal
+			text: options.rateTotal + " Ratings"
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 
 new card_profile
-	username: profileData.profiles.username
+	username: profileData.profiles[1].username
+	location: profileData.profiles[1].location
+	skillLevel: profileData.profiles[1].skillLevel
+	rateTotal: profileData.profiles[1].rateTotal
