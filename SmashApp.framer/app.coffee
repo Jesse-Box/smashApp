@@ -1,8 +1,39 @@
-profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+#Data
+
+#profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+
+#test
+profiles = [
+	{
+		"username": "Dylan",
+		"location": "Berlin, Germany",
+		"skillLevel": "Casual",
+		"rateTotal": "42"
+	},
+	{
+		"username": "David",
+		"location": "Amsterdam, Netherlands",
+		"skillLevel": "Pro Casual",
+		"rateTotal": "24"
+	},
+	{
+		"username": "Caro",
+		"location": "Rome, Italy",
+		"skillLevel": "Beginner",
+		"rateTotal": "2"
+	},
+	{
+		"username": "Benni",
+		"location": "Zadar, Croatia",
+		"skillLevel": "Pro Casual",
+		"rateTotal": "2"
+	}
+]
 
 Screen.backgroundColor = "white"
 
 ##variables
+
 #colours
 primaryColour = "#4374DC"
 secondaryColour = "white"
@@ -69,8 +100,14 @@ class card_profile extends Layer
 			lineHeight: 1.71
 			color: secondaryColour
 
-new card_profile
-	username: profileData.profiles[1].username
-	location: profileData.profiles[1].location
-	skillLevel: profileData.profiles[1].skillLevel
-	rateTotal: profileData.profiles[1].rateTotal
+#Array
+for profileStack, index in profiles
+	new card_profile
+		username: profileStack.username
+		location: profileStack.location
+		skillLevel: profileStack.skillLevel
+		rateTotal: profileStack.rateTotal
+
+
+
+
