@@ -1,6 +1,6 @@
 #Data
 
-#profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
 
 #test
 profiles = [
@@ -42,23 +42,16 @@ secondaryColour = "white"
 
 class card_profile extends Layer
 	constructor: (options = {}) ->
-
-		_.defaults options,
-			name: "card_profile"
-			height: 351
-			width: 264
-			backgroundColor: primaryColour
-			borderRadius: 24
-			username: "username"
-			location: "location"
-			skillLevel: "skillLevel"
-			rateTotal: "rateTotal"
+		
+		options.name = "card_profile"
+		options.height = 351
+		options.width = 264
+		options.backgroundColor = primaryColour
+		options.borderRadius = 24
 		
 		super options
 		
-		@layers = {}
-		
-		@layers.lbl_username = new TextLayer
+		lbl_username = new TextLayer
 			parent: @
 			name: "lbl_username"
 			y: 32
@@ -69,32 +62,32 @@ class card_profile extends Layer
 			fontWeight: 800
 			color: secondaryColour
 		
-		@layers.lbl_location = new TextLayer
+		lbl_location = new TextLayer
 			parent: @
 			name: "lbl_location"
-			y: @layers.lbl_username.maxY
-			x: @layers.lbl_username.x
+			y: lbl_username.maxY
+			x: lbl_username.x
 			text: options.location
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 		
-		@layers.lbl_skillLevel = new TextLayer
+		lbl_skillLevel = new TextLayer
 			parent: @
 			name: "lbl_skillLevel"	
 			y: Align.bottom(-60)
-			x: @layers.lbl_username.x
+			x: lbl_username.x
 			text: options.skillLevel
 			fontSize: 32
 			lineHeight: 1
 			fontWeight: 800
 			color: secondaryColour
 		
-		@layers.lbl_rateTotal = new TextLayer
+		lbl_rateTotal = new TextLayer
 			parent: @
 			name: "lbl_rateTotal"
-			y: @layers.lbl_skillLevel.maxY
-			x: @layers.lbl_username.x
+			y: lbl_skillLevel.maxY
+			x: lbl_username.x
 			text: options.rateTotal + " Ratings"
 			fontSize: 14
 			lineHeight: 1.71
@@ -102,12 +95,13 @@ class card_profile extends Layer
 
 #Array
 for profileStack, index in profiles
-	new card_profile
+	profileCard = new card_profile
+		y: 80 * index
 		username: profileStack.username
 		location: profileStack.location
 		skillLevel: profileStack.skillLevel
 		rateTotal: profileStack.rateTotal
-
-
+	profileCard.draggable.enabled = true
+	profileCard.draggable.constraints = profileCard.frame
 
 
