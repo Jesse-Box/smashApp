@@ -66,16 +66,19 @@ class CardProfile extends Layer
 			color: secondaryColour
 
 #Array
-for i in [(cards-1)..0]
+for i in [(profileData.profiles.length-1)..0]
+	
+	profile = profileData.profiles[i]
+	
 	card = new CardProfile
 		x: Align.center
 		y: Align.center(50)
 		z: i * -50
 		opacity: 0
-		username: i.username
-		location: i.location
-		skillLevel: i.skillLevel
-		rateTotal: i.rateTotal
+		username: profile.username
+		location: profile.location
+		skillLevel: profile.skillLevel
+		rateTotal: profile.rateTotal
 	card.draggable.enabled = yes
 	card.draggable.constraints = card.frame
 	
