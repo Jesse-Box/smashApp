@@ -5,6 +5,10 @@ Screen.backgroundColor = "white"
 ##variables
 primaryColour = "#4374DC"
 secondaryColour = "white"
+choice = null
+cards = 5
+counter = cards
+
 
 #Class Card Profile
 
@@ -62,12 +66,37 @@ class CardProfile extends Layer
 			color: secondaryColour
 
 #Array
-for profileStack, index in profileData.profiles
+for i in [(cards-1)..0]
 	card = new CardProfile
 		x: Align.center
-		y: 100 + (index * 10)
-		username: profileStack.username
-		location: profileStack.location
-		skillLevel: profileStack.skillLevel
-		rateTotal: profileStack.rateTotal
-		opacity: 1
+		y: Align.center(50)
+		z: i * -50
+		opacity: 0
+	card.draggable.enabled = yes
+	card.draggable.constraints = card.frame
+	
+	card.on "change:x", ->
+		swivel = Utils.modulate(@.midX, [0, Screen.width], [-30, 30])
+		fade = Utils.modulate(@.midX, [0, Screen.width], [-1, 1])
+		@.rotationZ = swivel
+		@.opacity = 1 - Math.abs(fade)
+	
+	card.on Events.DragEnd, ->
+		if @.midX > Screen.width / 2
+			choice = true
+		else
+			choice = false
+		@.visible = false
+		for j in [0...@.siblings.length]
+			@.siblings[j].animate
+				properties:
+					z: @.siblings[j].z + 50
+					y: @.siblings[j].y - 10
+					opacity: @.siblings[j].opacity + 0.2
+	
+	card.animate
+		properties:
+			opacity: Number((1 - (i / cards)).toFixed(2))
+			y: Align.center(i * 10)
+			backgroundColor: Utils.randomColor()
+		delay:  2 + i / cards
