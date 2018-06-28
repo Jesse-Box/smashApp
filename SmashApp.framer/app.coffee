@@ -14,7 +14,7 @@ class CardProfile extends Layer
 		options.name = "CardProfile"
 		options.height = 351
 		options.width = 264
-		options.backgroundColor = primaryColour
+		options.backgroundColor ?= primaryColour
 		options.borderRadius = 24
 		
 		super options
@@ -64,12 +64,10 @@ class CardProfile extends Layer
 #Array
 for profileStack, index in profileData.profiles
 	card = new CardProfile
-		y: 80 * index
+		x: Align.center
+		y: 100 + (index * 10)
 		username: profileStack.username
 		location: profileStack.location
 		skillLevel: profileStack.skillLevel
 		rateTotal: profileStack.rateTotal
-	card.draggable.enabled = true
-	card.draggable.constraints = card.frame
-
-
+		opacity: 1
