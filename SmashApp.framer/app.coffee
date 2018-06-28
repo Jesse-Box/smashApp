@@ -72,6 +72,10 @@ for i in [(cards-1)..0]
 		y: Align.center(50)
 		z: i * -50
 		opacity: 0
+		username: i.username
+		location: i.location
+		skillLevel: i.skillLevel
+		rateTotal: i.rateTotal
 	card.draggable.enabled = yes
 	card.draggable.constraints = card.frame
 	
