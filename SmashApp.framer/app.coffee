@@ -6,8 +6,7 @@ Screen.backgroundColor = "white"
 primaryColour = "#4374DC"
 secondaryColour = "white"
 choice = null
-cards = 5
-counter = cards
+visibleStack = 5
 
 
 #Class Card Profile
@@ -65,16 +64,15 @@ class CardProfile extends Layer
 			lineHeight: 1.71
 			color: secondaryColour
 
-#Array
+#loop
 for i in [(profileData.profiles.length-1)..0]
 	
 	profile = profileData.profiles[i]
 	
 	card = new CardProfile
 		x: Align.center
-		y: Align.center(50)
-		z: i * -50
-		opacity: 0
+		y: Align.center(40)
+		z: i * -40
 		username: profile.username
 		location: profile.location
 		skillLevel: profile.skillLevel
@@ -97,13 +95,12 @@ for i in [(profileData.profiles.length-1)..0]
 		for j in [0...@.siblings.length]
 			@.siblings[j].animate
 				properties:
-					z: @.siblings[j].z + 50
-					y: @.siblings[j].y - 10
+					z: @.siblings[j].z + 40
+					y: @.siblings[j].y - 5
 					opacity: @.siblings[j].opacity + 0.2
 	
 	card.animate
 		properties:
-			opacity: Number((1 - (i / cards)).toFixed(2))
-			y: Align.center(i * 10)
-			backgroundColor: Utils.randomColor()
-		delay:  2 + i / cards
+			opacity: Number((1 - (i / visibleStack)).toFixed(2))
+			y: Align.center(i * 5)
+		delay:  1 + i / profile
