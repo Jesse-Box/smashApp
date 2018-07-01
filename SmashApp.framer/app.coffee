@@ -1,35 +1,35 @@
 profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
 
-Screen.backgroundColor = "white"
-
 ##variables
-#colours
 primaryColour = "#4374DC"
 secondaryColour = "white"
+choice = null
+visibleStack = 5
 
-#class card_profile
+SmashApp = new FlowComponent
 
-class card_profile extends Layer
+Challengers = new Layer
+	parent: SmashApp
+	size: Screen.size
+	backgroundColor: "white"
+
+#Class Card Profile
+
+class CardProfile extends Layer
 	constructor: (options = {}) ->
-
-		_.defaults options,
-			name: "card_profile"
-			height: 351
-			width: 264
-			backgroundColor: primaryColour
-			borderRadius: 24
-			username: "username"
-			location: "location"
-			skillLevel: "skillLevel"
-			rateTotal: "rateTotal"
+		
+		options.name = "CardProfile"
+		options.parent ?= Challengers
+		options.height = 351
+		options.width = 264
+		options.backgroundColor ?= primaryColour
+		options.borderRadius = 24
 		
 		super options
 		
-		@layers = {}
-		
-		@layers.lbl_username = new TextLayer
+		username = new TextLayer
 			parent: @
-			name: "lbl_username"
+			name: "username"
 			y: 32
 			x: 24
 			text: options.username
@@ -38,39 +38,75 @@ class card_profile extends Layer
 			fontWeight: 800
 			color: secondaryColour
 		
-		@layers.lbl_location = new TextLayer
+		location = new TextLayer
 			parent: @
-			name: "lbl_location"
-			y: @layers.lbl_username.maxY
-			x: @layers.lbl_username.x
+			name: "location"
+			y: username.maxY
+			x: username.x
 			text: options.location
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 		
-		@layers.lbl_skillLevel = new TextLayer
+		skillLevel = new TextLayer
 			parent: @
-			name: "lbl_skillLevel"	
+			name: "skillLevel"	
 			y: Align.bottom(-60)
-			x: @layers.lbl_username.x
+			x: username.x
 			text: options.skillLevel
 			fontSize: 32
 			lineHeight: 1
 			fontWeight: 800
 			color: secondaryColour
 		
-		@layers.lbl_rateTotal = new TextLayer
+		rateTotal = new TextLayer
 			parent: @
-			name: "lbl_rateTotal"
-			y: @layers.lbl_skillLevel.maxY
-			x: @layers.lbl_username.x
+			name: "rateTotal"
+			y: skillLevel.maxY
+			x: username.x
 			text: options.rateTotal + " Ratings"
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 
-new card_profile
-	username: profileData.profiles[1].username
-	location: profileData.profiles[1].location
-	skillLevel: profileData.profiles[1].skillLevel
-	rateTotal: profileData.profiles[1].rateTotal
+#Loop
+for i in [(profileData.profiles.length-1)..0]
+	
+	profile = profileData.profiles[i]
+	
+	card = new CardProfile
+		x: Align.center
+		y: Align.center(40)
+		username: profile.username
+		location: profile.location
+		skillLevel: profile.skillLevel
+		rateTotal: profile.rateTotal
+	card.draggable.enabled = yes
+	card.draggable.constraints = card.frame
+	
+	card.on "change:x", ->
+		swivel = Utils.modulate(@.midX, [0, Screen.width], [-30, 30])
+		fade = Utils.modulate(@.midX, [0, Screen.width], [-1, 1])
+		@.rotationZ = swivel
+		@.opacity = 1 - Math.abs(fade)
+	
+	card.on Events.DragEnd, ->
+		if @.midX > Screen.width / 2
+			choice = true
+		else
+			choice = false
+		@.visible = false
+		for j in [0...@.siblings.length]
+			@.siblings[j].animate
+				properties:
+					z: @.siblings[j].z + 40
+					y: @.siblings[j].y - 5
+					opacity: @.siblings[j].opacity + 0.2
+
+	card.animate
+		properties:
+			opacity: Number((1 - (i / visibleStack)).toFixed(2))
+			y: Align.center(i * 5)
+		delay:  1 + i / profile
+
+SmashApp.showNext(Challengers)
