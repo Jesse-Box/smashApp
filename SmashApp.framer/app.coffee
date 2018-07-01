@@ -1,13 +1,17 @@
 profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
 
-Screen.backgroundColor = "white"
-
 ##variables
 primaryColour = "#4374DC"
 secondaryColour = "white"
 choice = null
 visibleStack = 5
 
+SmashApp = new FlowComponent
+
+Challengers = new Layer
+	parent: SmashApp
+	size: Screen.size
+	backgroundColor: "white"
 
 #Class Card Profile
 
@@ -15,6 +19,7 @@ class CardProfile extends Layer
 	constructor: (options = {}) ->
 		
 		options.name = "CardProfile"
+		options.parent ?= Challengers
 		options.height = 351
 		options.width = 264
 		options.backgroundColor ?= primaryColour
@@ -43,7 +48,7 @@ class CardProfile extends Layer
 			lineHeight: 1.71
 			color: secondaryColour
 		
-		lbl_skillLevel = new TextLayer
+		skillLevel = new TextLayer
 			parent: @
 			name: "skillLevel"	
 			y: Align.bottom(-60)
@@ -54,17 +59,17 @@ class CardProfile extends Layer
 			fontWeight: 800
 			color: secondaryColour
 		
-		lbl_rateTotal = new TextLayer
+		rateTotal = new TextLayer
 			parent: @
 			name: "rateTotal"
-			y: lbl_skillLevel.maxY
+			y: skillLevel.maxY
 			x: username.x
 			text: options.rateTotal + " Ratings"
 			fontSize: 14
 			lineHeight: 1.71
 			color: secondaryColour
 
-#loop
+#Loop
 for i in [(profileData.profiles.length-1)..0]
 	
 	profile = profileData.profiles[i]
@@ -72,7 +77,6 @@ for i in [(profileData.profiles.length-1)..0]
 	card = new CardProfile
 		x: Align.center
 		y: Align.center(40)
-		z: i * -40
 		username: profile.username
 		location: profile.location
 		skillLevel: profile.skillLevel
@@ -98,9 +102,11 @@ for i in [(profileData.profiles.length-1)..0]
 					z: @.siblings[j].z + 40
 					y: @.siblings[j].y - 5
 					opacity: @.siblings[j].opacity + 0.2
-	
+
 	card.animate
 		properties:
 			opacity: Number((1 - (i / visibleStack)).toFixed(2))
 			y: Align.center(i * 5)
 		delay:  1 + i / profile
+
+SmashApp.showNext(Challengers)
