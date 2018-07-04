@@ -1,17 +1,35 @@
-profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+## Variables, Defaults
 
-##variables
+#Global Variables
 primaryColour = "#4374DC"
 secondaryColour = "white"
-choice = null
-visibleStack = 5
 
+#Profile Stack Variables
+threshold = 1/5*Screen.width
+distance = 6
+opacity = 0
+scale = 50
+
+#Default changes
+Framer.Defaults.Animation =
+	curve: Bezier.easeInOut
+	time: 0.3
+
+##Data, Flows & Data
+
+#JSON Profiles Import
+profileData = JSON.parse Utils.domLoadDataSync "data/profiles.json"
+
+#Flow Component
 SmashApp = new FlowComponent
 
+#Challengers Screen
 Challengers = new Layer
-	parent: SmashApp
 	size: Screen.size
-	backgroundColor: "white"
+	backgroundColor: secondaryColour
+	
+cards = []
+deltaX = null
 
 #Class Card Profile
 
@@ -19,7 +37,7 @@ class CardProfile extends Layer
 	constructor: (options = {}) ->
 		
 		options.name = "CardProfile"
-		options.parent ?= Challengers
+		options.parent = Challengers
 		options.height = 351
 		options.width = 264
 		options.backgroundColor ?= primaryColour
@@ -69,44 +87,76 @@ class CardProfile extends Layer
 			lineHeight: 1.71
 			color: secondaryColour
 
-#Loop
-for i in [(profileData.profiles.length-1)..0]
-	
-	profile = profileData.profiles[i]
-	
+# Cards Array Population 
+
+profileData.profiles.map (profile) ->
 	card = new CardProfile
 		x: Align.center
-		y: Align.center(40)
+		y: Align.center
 		username: profile.username
 		location: profile.location
 		skillLevel: profile.skillLevel
 		rateTotal: profile.rateTotal
-	card.draggable.enabled = yes
-	card.draggable.constraints = card.frame
-	
-	card.on "change:x", ->
-		swivel = Utils.modulate(@.midX, [0, Screen.width], [-30, 30])
-		fade = Utils.modulate(@.midX, [0, Screen.width], [-1, 1])
-		@.rotationZ = swivel
-		@.opacity = 1 - Math.abs(fade)
-	
-	card.on Events.DragEnd, ->
-		if @.midX > Screen.width / 2
-			choice = true
-		else
-			choice = false
-		@.visible = false
-		for j in [0...@.siblings.length]
-			@.siblings[j].animate
-				properties:
-					z: @.siblings[j].z + 40
-					y: @.siblings[j].y - 5
-					opacity: @.siblings[j].opacity + 0.2
+	cards.unshift(card)
 
-	card.animate
-		properties:
-			opacity: Number((1 - (i / visibleStack)).toFixed(2))
-			y: Align.center(i * 5)
-		delay:  1 + i / profile
+#Profile Stack Function
+
+initialView = () ->
+	for card, i in cards
+		card.animate
+			x: Align.center
+			y: Align.center(i*distance)
+			opacity: 1-(i/opacity) + 1/opacity
+			scale: 1-(i/scale)
+
+#Profile Card On Drag Behaviour
+
+dragEvent = (activeCard) ->
+	activeCard.draggable = true
+	
+	activeCard.onDrag ->
+		deltaX = event.offset.x
+		swivel = Utils.modulate(@.midX,[0,Screen.width],[-20,20])
+		fade = Utils.modulate(@.midX,[0,Screen.width],[-0.5,0.5])
+		@.rotation = swivel
+		@.opacity = 1-Math.abs(fade)
+
+	activeCard.on Events.DragEnd, ->
+		if deltaX > threshold
+			DragEndEvent(activeCard, "right")
+		else if deltaX < -threshold
+			DragEndEvent(activeCard, "left")
+		else 
+			DragEndEvent(activeCard, "return")
+
+#Profile Card Drag End Behaviour 
+DragEndEvent = (activeCard, direction) ->
+	if direction is "right"
+		activeCard.animate
+			x: 1.2 * Screen.width
+			rotation: 30
+	else if direction is "left"
+		activeCard.animate
+			x: -1.2 * Screen.width
+			rotation: -30
+	else
+		activeCard.animate
+			x: Align.center
+			y: Align.center
+			rotation: 0
+	
+	activeCard.onAnimationEnd ->
+		unless direction is "return"
+			activeCard.destroy()
+			cards.shift(activeCard)
+			unless cards.length is 0
+				dragEvent(cards[0])
+		
+		unless cards.length is 0
+			initialView()
+
+#Prototype Initialisation
 
 SmashApp.showNext(Challengers)
+initialView()
+dragEvent(cards[0])
