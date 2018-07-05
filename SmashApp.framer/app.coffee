@@ -87,7 +87,7 @@ class CardProfile extends Layer
 			lineHeight: 1.71
 			color: secondaryColour
 
-# Cards Array Population 
+# Function Cards Array Population 
 
 profileData.profiles.map (profile) ->
 	card = new CardProfile
@@ -99,7 +99,7 @@ profileData.profiles.map (profile) ->
 		rateTotal: profile.rateTotal
 	cards.unshift(card)
 
-#Profile Stack Function
+#Function Profile Stack Layout 
 
 initialView = () ->
 	for card, i in cards
@@ -109,7 +109,7 @@ initialView = () ->
 			opacity: 1-(i/opacity) + 1/opacity
 			scale: 1-(i/scale)
 
-#Profile Card On Drag Behaviour
+#Function Profile Card On Drag Behaviour
 
 dragEvent = (activeCard) ->
 	activeCard.draggable = true
@@ -129,7 +129,7 @@ dragEvent = (activeCard) ->
 		else 
 			DragEndEvent(activeCard, "return")
 
-#Profile Card Drag End Behaviour 
+#Function Profile Card Drag End Behaviour
 DragEndEvent = (activeCard, direction) ->
 	if direction is "right"
 		activeCard.animate
