@@ -155,8 +155,21 @@ DragEndEvent = (activeCard, direction) ->
 		unless cards.length is 0
 			initialView()
 
+btnAccept = new Layer
+	x: Align.center
+	y: Challengers.maxY - 96
+	parent: Challengers
+	size: 48
+	borderRadius: 24
+
+btnAccept.onTap ->
+	card.animate
+		x: 1.2 * Screen.width
+		rotation: 30
+
 #Prototype Initialisation
 
 SmashApp.showNext(Challengers)
 initialView()
 dragEvent(cards[0])
+
